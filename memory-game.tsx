@@ -62,6 +62,10 @@ const customStyles = `
   .touch-manipulation {
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   
   @keyframes cardFlip {
@@ -156,10 +160,21 @@ const customStyles = `
   @media (max-width: 640px) {
     .card-container {
       transition: transform 0.1s ease;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
     
     .card-container:active {
       transform: scale(0.95);
+    }
+    
+    * {
+      -webkit-tap-highlight-color: transparent;
     }
   }
 `;
@@ -287,9 +302,23 @@ export default function MemoryGame() {
       startGame();
     }
 
-    if (flippedCards.length === 2) return;
-    if (cards[cardId].isFlipped || cards[cardId].isMatched) return;
-    if (isShuffling) return;
+    // More comprehensive checks
+    if (flippedCards.length >= 2) {
+      return;
+    }
+
+    const targetCard = cards.find((card) => card.id === cardId);
+    if (!targetCard) {
+      return;
+    }
+
+    if (targetCard.isFlipped || targetCard.isMatched) {
+      return;
+    }
+
+    if (isShuffling) {
+      return;
+    }
 
     const newFlippedCards = [...flippedCards, cardId];
     setFlippedCards(newFlippedCards);
@@ -530,9 +559,9 @@ export default function MemoryGame() {
                 className={`aspect-square cursor-pointer perspective-1000 card-container ${
                   isShuffling ? "shuffle-animation" : ""
                 } touch-manipulation`}
-                onClick={() => flipCard(card.id)}
-                onTouchStart={(e) => {
+                onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   flipCard(card.id);
                 }}
                 style={{

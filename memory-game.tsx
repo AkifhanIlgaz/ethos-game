@@ -31,6 +31,13 @@ interface Particle {
   life: number;
 }
 
+interface DollarParticle {
+  id: number;
+  x: number;
+  y: number;
+  delay: number;
+}
+
 const gameImages = [
   "/images/logo-pink-teal.jpg",
   "/images/logo-purple-sad.jpg",
@@ -131,6 +138,17 @@ const customStyles = `
     }
   }
   
+  @keyframes dollarFall {
+    0% { 
+      transform: translateY(-100px) rotate(0deg);
+      opacity: 1;
+    }
+    100% { 
+      transform: translateY(calc(100vh + 100px)) rotate(360deg);
+      opacity: 0;
+    }
+  }
+  
   .card-flip-animation {
     animation: cardFlip 0.7s ease-in-out;
   }
@@ -154,6 +172,16 @@ const customStyles = `
     position: absolute;
     pointer-events: none;
     animation: confetti 2s ease-out forwards;
+  }
+  
+  .dollar {
+    position: fixed;
+    pointer-events: none;
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    animation: dollarFall 4s linear forwards;
+    z-index: 1000;
   }
 
   /* Mobile optimizations */
@@ -190,6 +218,7 @@ export default function MemoryGame() {
   });
   const [gameStarted, setGameStarted] = useState(false);
   const [particles, setParticles] = useState<Particle[]>([]);
+  const [dollarParticles, setDollarParticles] = useState<DollarParticle[]>([]);
   const [isShuffling, setIsShuffling] = useState(false);
   const [showMobileWarning, setShowMobileWarning] = useState(false);
   const [bestTime, setBestTime] = useState<number | null>(
@@ -399,6 +428,19 @@ export default function MemoryGame() {
     }
   };
 
+  // Play victory music
+  const playVictoryMusic = () => {
+    try {
+      const audio = new Audio("/MONEY SONG - here comes the money [HQ].mp3");
+      audio.volume = 0.7; // Set volume to 70%
+      audio.play().catch((error) => {
+        console.log("Could not play victory music:", error);
+      });
+    } catch (error) {
+      console.log("Victory music not supported");
+    }
+  };
+
   // Create particles effect
   const createParticles = (x: number, y: number) => {
     const colors = [
@@ -431,6 +473,52 @@ export default function MemoryGame() {
     setTimeout(() => {
       setParticles((prev) => prev.filter((p) => !newParticles.includes(p)));
     }, 1000);
+  };
+
+  // Create dollar rain effect
+  const createDollarRain = () => {
+    const createBatch = () => {
+      const newDollars: DollarParticle[] = [];
+      const baseId = Date.now() + Math.random() * 10000;
+
+      // Create 15 dollar bills falling from different positions
+      for (let i = 0; i < 15; i++) {
+        newDollars.push({
+          id: baseId + i + Math.random() * 1000,
+          x: Math.random() * window.innerWidth,
+          y: -100,
+          delay: Math.random() * 500, // Shorter delay between each dollar
+        });
+      }
+
+      setDollarParticles((prev) => [...prev, ...newDollars]);
+
+      // Remove this batch after animation
+      setTimeout(() => {
+        setDollarParticles((prev) =>
+          prev.filter(
+            (dollar) =>
+              !newDollars.some((newDollar) => newDollar.id === dollar.id)
+          )
+        );
+      }, 4500);
+    };
+
+    // Create multiple batches over time for continuous effect
+    createBatch(); // First batch immediately
+
+    const intervals: NodeJS.Timeout[] = [];
+    for (let i = 1; i <= 8; i++) {
+      const timeout = setTimeout(() => {
+        createBatch();
+      }, i * 800); // New batch every 800ms
+      intervals.push(timeout);
+    }
+
+    // Clean up timeouts after 10 seconds
+    setTimeout(() => {
+      intervals.forEach(clearTimeout);
+    }, 10000);
   };
 
   // Timer effect
@@ -554,12 +642,18 @@ export default function MemoryGame() {
             if (updatedCards.every((card) => card.isMatched)) {
               // Game complete
               playVictorySound(); // Play victory sound
+              playVictoryMusic(); // Play victory music
 
               setStats((prev) => ({
                 ...prev,
                 isComplete: true,
                 isPlaying: false,
               }));
+
+              // Start dollar rain effect
+              setTimeout(() => {
+                createDollarRain();
+              }, 1000);
 
               // Update best scores
               const currentTime = stats.time;
@@ -635,7 +729,9 @@ export default function MemoryGame() {
   return (
     <>
       <style jsx>{customStyles}</style>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-800 to-slate-900 p-2 sm:p-4 relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-800 to-slate-900 p-2 sm:p-4 relative overflow-hidden ">
+        {/* Left Side Video */}
+
         {/* Particles */}
         {particles.map((particle) => (
           <div
@@ -651,7 +747,23 @@ export default function MemoryGame() {
           />
         ))}
 
-        <div className="max-w-4xl mx-auto">
+        {/* Dollar Rain */}
+        {dollarParticles.map((dollar) => (
+          <div
+            key={dollar.id}
+            className="dollar"
+            style={{
+              left: dollar.x,
+              top: dollar.y,
+              animationDelay: `${dollar.delay}ms`,
+            }}
+          >
+            💵
+          </div>
+        ))}
+
+        <div className="max-w-4xl mx-auto xl:px-52">
+          {/* Ana içerik containerı - xl ekranlarında yan videoları için padding */}
           {/* Header */}
           <div className="text-center mb-4 sm:mb-8">
             <h1 className="text-2xl sm:text-4xl font-bold text-white mb-2 sm:mb-4">
@@ -803,11 +915,22 @@ export default function MemoryGame() {
             <Button
               onClick={initializeGame}
               disabled={isShuffling}
-              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-white/30 disabled:opacity-50 border px-3 sm:px-4 py-2 text-xs sm:text-base"
+              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-white/30 disabled:opacity-50 border px-3 sm:px-4 py-2 text-xs sm:text-base "
             >
               <RotateCcw className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
               {isShuffling ? "Shuffling..." : "New Game"}
             </Button>
+
+            {/* Test Button - Remove Later */}
+            {/* <Button
+              onClick={() => {
+                createDollarRain();
+                playVictoryMusic();
+              }}
+              className="bg-green-600 hover:bg-green-700 text-white border px-3 sm:px-4 py-2 text-xs sm:text-base"
+            >
+              💰 Test Dollar Rain
+            </Button> */}
           </div>
 
           {/* Win Modal */}

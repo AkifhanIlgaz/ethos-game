@@ -280,103 +280,109 @@ export default function MemoryGame() {
       setStats((prev) => ({ ...prev, moves: prev.moves + 1 }));
 
       const [firstId, secondId] = newFlippedCards;
-      const firstCard = cards[firstId];
-      const secondCard = cards[secondId];
 
-      if (firstCard.image === secondCard.image) {
-        // Match found - keep cards flipped and mark as matched
-        setTimeout(() => {
-          setCards((prev) =>
-            prev.map((card) =>
+      // Use current cards state to check for matches
+      setCards((currentCards) => {
+        const firstCard = currentCards.find((card) => card.id === firstId);
+        const secondCard = currentCards.find((card) => card.id === secondId);
+
+        if (firstCard && secondCard && firstCard.image === secondCard.image) {
+          // Match found - keep cards flipped and mark as matched
+          setTimeout(() => {
+            setCards((prev) =>
+              prev.map((card) =>
+                card.id === firstId || card.id === secondId
+                  ? { ...card, isMatched: true, isFlipped: true }
+                  : card
+              )
+            );
+            setFlippedCards([]);
+
+            // Create particle effect at card positions
+            const cardElements = document.querySelectorAll(".card-container");
+            const firstCardElement = cardElements[firstId] as HTMLElement;
+            const secondCardElement = cardElements[secondId] as HTMLElement;
+
+            if (firstCardElement && secondCardElement) {
+              const rect1 = firstCardElement.getBoundingClientRect();
+              const rect2 = secondCardElement.getBoundingClientRect();
+
+              createParticles(
+                rect1.left + rect1.width / 2,
+                rect1.top + rect1.height / 2
+              );
+              createParticles(
+                rect2.left + rect2.width / 2,
+                rect2.top + rect2.height / 2
+              );
+            }
+
+            // Check if game is complete
+            const updatedCards = currentCards.map((card) =>
               card.id === firstId || card.id === secondId
                 ? { ...card, isMatched: true, isFlipped: true }
                 : card
-            )
-          );
-          setFlippedCards([]);
-
-          // Create particle effect at card positions
-          const cardElements = document.querySelectorAll(".card-container");
-          const firstCardElement = cardElements[firstId] as HTMLElement;
-          const secondCardElement = cardElements[secondId] as HTMLElement;
-
-          if (firstCardElement && secondCardElement) {
-            const rect1 = firstCardElement.getBoundingClientRect();
-            const rect2 = secondCardElement.getBoundingClientRect();
-
-            createParticles(
-              rect1.left + rect1.width / 2,
-              rect1.top + rect1.height / 2
             );
-            createParticles(
-              rect2.left + rect2.width / 2,
-              rect2.top + rect2.height / 2
-            );
-          }
 
-          // Check if game is complete
-          const updatedCards = cards.map((card) =>
-            card.id === firstId || card.id === secondId
-              ? { ...card, isMatched: true, isFlipped: true }
-              : card
-          );
+            if (updatedCards.every((card) => card.isMatched)) {
+              // Game complete
+              setStats((prev) => ({
+                ...prev,
+                isComplete: true,
+                isPlaying: false,
+              }));
 
-          if (updatedCards.every((card) => card.isMatched)) {
-            // Game complete
-            setStats((prev) => ({
-              ...prev,
-              isComplete: true,
-              isPlaying: false,
-            }));
+              // Update best scores
+              const currentTime = stats.time;
+              const currentMoves = stats.moves + 1;
 
-            // Update best scores
-            const currentTime = stats.time;
-            const currentMoves = stats.moves + 1;
-
-            if (typeof window !== "undefined") {
-              if (!bestTime || currentTime < bestTime) {
-                setBestTime(currentTime);
-                localStorage.setItem(
-                  "memoryGameBestTime",
-                  currentTime.toString()
-                );
-              }
-
-              if (!bestMoves || currentMoves < bestMoves) {
-                setBestMoves(currentMoves);
-                localStorage.setItem(
-                  "memoryGameBestMoves",
-                  currentMoves.toString()
-                );
-              }
-            }
-
-            // Create celebration particles
-            setTimeout(() => {
-              for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                  createParticles(
-                    Math.random() * window.innerWidth,
-                    (Math.random() * window.innerHeight) / 2
+              if (typeof window !== "undefined") {
+                if (!bestTime || currentTime < bestTime) {
+                  setBestTime(currentTime);
+                  localStorage.setItem(
+                    "memoryGameBestTime",
+                    currentTime.toString()
                   );
-                }, i * 100);
+                }
+
+                if (!bestMoves || currentMoves < bestMoves) {
+                  setBestMoves(currentMoves);
+                  localStorage.setItem(
+                    "memoryGameBestMoves",
+                    currentMoves.toString()
+                  );
+                }
               }
-            }, 500);
-          }
-        }, 500);
-      } else {
-        // No match
-        setTimeout(() => {
-          setCards((prev) =>
-            prev.map((card) =>
-              card.id === firstId || card.id === secondId
-                ? { ...card, isFlipped: false }
-                : card
-            )
-          );
-          setFlippedCards([]);
-        }, 1000);
-      }
+
+              // Create celebration particles
+              setTimeout(() => {
+                for (let i = 0; i < 50; i++) {
+                  setTimeout(() => {
+                    createParticles(
+                      Math.random() * window.innerWidth,
+                      (Math.random() * window.innerHeight) / 2
+                    );
+                  }, i * 100);
+                }
+              }, 500);
+            }
+          }, 1000);
+        } else {
+          // No match
+          setTimeout(() => {
+            setCards((prev) =>
+              prev.map((card) =>
+                card.id === firstId || card.id === secondId
+                  ? { ...card, isFlipped: false }
+                  : card
+              )
+            );
+            setFlippedCards([]);
+          }, 1500);
+        }
+
+        return currentCards;
+      });
     }
   };
 

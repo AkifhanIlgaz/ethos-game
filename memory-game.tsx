@@ -59,6 +59,11 @@ const customStyles = `
     transform: rotateY(180deg);
   }
   
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
   @keyframes cardFlip {
     0% { transform: rotateY(0deg) scale(1); }
     50% { transform: rotateY(90deg) scale(1.05); }
@@ -84,10 +89,20 @@ const customStyles = `
   
   @keyframes shuffle {
     0% { transform: translateX(0) translateY(0) rotate(0deg); }
-    25% { transform: translateX(20px) translateY(-10px) rotate(5deg); }
-    50% { transform: translateX(-15px) translateY(15px) rotate(-3deg); }
-    75% { transform: translateX(10px) translateY(-5px) rotate(2deg); }
+    25% { transform: translateX(10px) translateY(-5px) rotate(3deg); }
+    50% { transform: translateX(-8px) translateY(8px) rotate(-2deg); }
+    75% { transform: translateX(5px) translateY(-3px) rotate(1deg); }
     100% { transform: translateX(0) translateY(0) rotate(0deg); }
+  }
+  
+  @media (min-width: 640px) {
+    @keyframes shuffle {
+      0% { transform: translateX(0) translateY(0) rotate(0deg); }
+      25% { transform: translateX(20px) translateY(-10px) rotate(5deg); }
+      50% { transform: translateX(-15px) translateY(15px) rotate(-3deg); }
+      75% { transform: translateX(10px) translateY(-5px) rotate(2deg); }
+      100% { transform: translateX(0) translateY(0) rotate(0deg); }
+    }
   }
   
   @keyframes particle {
@@ -135,6 +150,17 @@ const customStyles = `
     position: absolute;
     pointer-events: none;
     animation: confetti 2s ease-out forwards;
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 640px) {
+    .card-container {
+      transition: transform 0.1s ease;
+    }
+    
+    .card-container:active {
+      transform: scale(0.95);
+    }
   }
 `;
 
@@ -406,7 +432,7 @@ export default function MemoryGame() {
   return (
     <>
       <style jsx>{customStyles}</style>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-800 to-slate-900 p-4 relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-800 to-slate-900 p-2 sm:p-4 relative overflow-hidden">
         {/* Particles */}
         {particles.map((particle) => (
           <div
@@ -424,37 +450,43 @@ export default function MemoryGame() {
 
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-white mb-4">
-              🧠 EthOS Faces
+          <div className="text-center mb-4 sm:mb-8">
+            <h1 className="text-2xl sm:text-4xl font-bold text-white mb-2 sm:mb-4">
+              EthOS Faces
             </h1>
-            <p className="text-gray-300 text-lg">Find matching pairs!</p>
+            <p className="text-gray-300 text-sm sm:text-lg">
+              Find matching pairs!
+            </p>
             {isShuffling && (
-              <p className="text-yellow-400 text-sm mt-2 animate-pulse">
+              <p className="text-yellow-400 text-xs sm:text-sm mt-2 animate-pulse">
                 Shuffling cards...
               </p>
             )}
           </div>
 
           {/* Game Stats */}
-          <div className="flex justify-center gap-6 mb-8">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-white border border-white/20">
-              <div className="flex items-center gap-2">
-                <MousePointer className="w-5 h-5" />
-                <span className="font-semibold">{stats.moves} Moves</span>
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-6 mb-4 sm:mb-8">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-2 sm:px-4 py-1 sm:py-2 text-white border border-white/20">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <MousePointer className="w-3 sm:w-5 h-3 sm:h-5" />
+                <span className="font-semibold text-xs sm:text-base">
+                  {stats.moves} Moves
+                </span>
               </div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-white border border-white/20">
-              <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5" />
-                <span className="font-semibold">{formatTime(stats.time)}</span>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-2 sm:px-4 py-1 sm:py-2 text-white border border-white/20">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Clock className="w-3 sm:w-5 h-3 sm:h-5" />
+                <span className="font-semibold text-xs sm:text-base">
+                  {formatTime(stats.time)}
+                </span>
               </div>
             </div>
             {bestTime !== null && (
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-white border border-white/20">
-                <div className="flex items-center gap-2">
-                  <Trophy className="w-5 h-5" />
-                  <span className="font-semibold">
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg px-2 sm:px-4 py-1 sm:py-2 text-white border border-white/20">
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <Trophy className="w-3 sm:w-5 h-3 sm:h-5" />
+                  <span className="font-semibold text-xs sm:text-base">
                     Best: {formatTime(bestTime)}
                   </span>
                 </div>
@@ -463,27 +495,27 @@ export default function MemoryGame() {
           </div>
 
           {/* Game Status */}
-          <div className="flex items-center justify-center gap-4 mb-8">
+          <div className="flex items-center justify-center gap-4 mb-4 sm:mb-8">
             {!gameStarted && (
-              <div className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 rounded-lg">
-                <span className="text-blue-300 font-medium">
+              <div className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-500/20 rounded-lg">
+                <span className="text-blue-300 font-medium text-xs sm:text-base text-center">
                   Click any card to start playing!
                 </span>
               </div>
             )}
 
             {gameStarted && stats.isPlaying && (
-              <div className="flex items-center gap-2 px-4 py-2 bg-green-500/20 rounded-lg">
-                <span className="text-green-300 font-medium">
+              <div className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-green-500/20 rounded-lg">
+                <span className="text-green-300 font-medium text-xs sm:text-base">
                   Game in Progress
                 </span>
               </div>
             )}
 
             {stats.isComplete && (
-              <div className="flex items-center gap-2 px-4 py-2 bg-yellow-500/20 rounded-lg">
-                <Trophy className="w-4 h-4 text-yellow-300" />
-                <span className="text-yellow-300 font-medium">
+              <div className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-yellow-500/20 rounded-lg">
+                <Trophy className="w-3 sm:w-4 h-3 sm:h-4 text-yellow-300" />
+                <span className="text-yellow-300 font-medium text-xs sm:text-base">
                   Game Complete!
                 </span>
               </div>
@@ -491,14 +523,18 @@ export default function MemoryGame() {
           </div>
 
           {/* Game Board */}
-          <div className="grid grid-cols-4 gap-3 max-w-lg mx-auto mb-8">
+          <div className="grid grid-cols-4 gap-1 sm:gap-3 max-w-xs sm:max-w-lg mx-auto mb-4 sm:mb-8 px-2 sm:px-0">
             {cards.map((card) => (
               <div
                 key={card.id}
                 className={`aspect-square cursor-pointer perspective-1000 card-container ${
                   isShuffling ? "shuffle-animation" : ""
-                }`}
+                } touch-manipulation`}
                 onClick={() => flipCard(card.id)}
+                onTouchStart={(e) => {
+                  e.preventDefault();
+                  flipCard(card.id);
+                }}
                 style={{
                   animationDelay: isShuffling ? `${card.id * 50}ms` : "0ms",
                 }}
@@ -508,7 +544,7 @@ export default function MemoryGame() {
                     relative w-full h-full transition-transform duration-700 transform-style-preserve-3d
                     ${card.isFlipped || card.isMatched ? "rotate-y-180" : ""}
                     ${card.isMatched ? "match-pulse" : ""}
-                    hover:scale-105
+                    hover:scale-105 active:scale-95
                   `}
                 >
                   {/* Back of card (EthOS logo) */}
@@ -520,7 +556,7 @@ export default function MemoryGame() {
                       hover:shadow-xl transition-shadow duration-300
                     `}
                   >
-                    <div className="relative w-full h-full p-3">
+                    <div className="relative w-full h-full p-2 sm:p-3">
                       <Image
                         src="/images/ethos-logo.jpg"
                         alt="EthOS Logo"
@@ -538,13 +574,13 @@ export default function MemoryGame() {
                       bg-white shadow-xl border-2 border-blue-200
                       ${
                         card.isMatched
-                          ? "ring-4 ring-green-400 ring-opacity-60 bg-green-50"
+                          ? "ring-2 sm:ring-4 ring-green-400 ring-opacity-60 bg-green-50"
                           : ""
                       }
                       flex items-center justify-center
                     `}
                   >
-                    <div className="relative w-full h-full p-2">
+                    <div className="relative w-full h-full p-1 sm:p-2">
                       <Image
                         src={card.image || "/placeholder.svg"}
                         alt="Memory card"
@@ -560,68 +596,68 @@ export default function MemoryGame() {
           </div>
 
           {/* Reset Button */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-4 sm:mb-8">
             <Button
               onClick={initializeGame}
               disabled={isShuffling}
-              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-white/30 disabled:opacity-50 border"
+              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-white/30 disabled:opacity-50 border px-3 sm:px-4 py-2 text-xs sm:text-base"
             >
-              <RotateCcw className="w-4 h-4 mr-2" />
+              <RotateCcw className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
               {isShuffling ? "Shuffling..." : "New Game"}
             </Button>
           </div>
 
           {/* Win Modal */}
           {stats.isComplete && (
-            <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
-              <Card className="bg-white p-8 text-center max-w-sm w-full shadow-2xl">
+            <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-2 sm:p-4 z-50">
+              <Card className="bg-white p-4 sm:p-8 text-center max-w-xs sm:max-w-sm w-full shadow-2xl mx-2">
                 <div className="mb-4">
-                  <Trophy className="w-16 h-16 text-yellow-500 mx-auto mb-4 animate-bounce" />
-                  <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                  <Trophy className="w-12 sm:w-16 h-12 sm:h-16 text-yellow-500 mx-auto mb-2 sm:mb-4 animate-bounce" />
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
                     🎉 Congratulations!
                   </h2>
-                  <p className="text-gray-600 mb-4">
+                  <p className="text-gray-600 mb-4 text-sm sm:text-base">
                     You completed the game successfully!
                   </p>
                 </div>
 
-                <div className="space-y-2 mb-6">
-                  <div className="flex justify-between">
+                <div className="space-y-2 mb-4 sm:mb-6">
+                  <div className="flex justify-between text-sm sm:text-base">
                     <span className="text-gray-600">Moves:</span>
                     <span className="font-semibold">{stats.moves}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-sm sm:text-base">
                     <span className="text-gray-600">Time:</span>
                     <span className="font-semibold">
                       {formatTime(stats.time)}
                     </span>
                   </div>
                   {bestMoves === stats.moves && (
-                    <div className="text-center text-green-600 font-medium">
+                    <div className="text-center text-green-600 font-medium text-xs sm:text-sm">
                       🏆 New best moves record!
                     </div>
                   )}
                   {bestTime === stats.time && (
-                    <div className="text-center text-green-600 font-medium">
+                    <div className="text-center text-green-600 font-medium text-xs sm:text-sm">
                       ⚡ New best time record!
                     </div>
                   )}
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <Button
                     onClick={shareOnX}
-                    className="w-full bg-black hover:bg-gray-800 text-white"
+                    className="w-full bg-black hover:bg-gray-800 text-white py-2 sm:py-3 text-xs sm:text-base"
                   >
-                    <Share className="w-4 h-4 mr-2" />
+                    <Share className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
                     Share on X
                   </Button>
 
                   <Button
                     onClick={initializeGame}
-                    className="w-full bg-transparent border border-gray-300 hover:bg-gray-50 text-gray-700"
+                    className="w-full bg-transparent border border-gray-300 hover:bg-gray-50 text-gray-700 py-2 sm:py-3 text-xs sm:text-base"
                   >
-                    <RotateCcw className="w-4 h-4 mr-2" />
+                    <RotateCcw className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
                     Play Again
                   </Button>
                 </div>

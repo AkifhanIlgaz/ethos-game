@@ -191,6 +191,7 @@ export default function MemoryGame() {
   const [gameStarted, setGameStarted] = useState(false);
   const [particles, setParticles] = useState<Particle[]>([]);
   const [isShuffling, setIsShuffling] = useState(false);
+  const [showMobileWarning, setShowMobileWarning] = useState(false);
   const [bestTime, setBestTime] = useState<number | null>(
     typeof window !== "undefined" && localStorage.getItem("memoryGameBestTime")
       ? parseInt(localStorage.getItem("memoryGameBestTime")!)
@@ -240,6 +241,162 @@ export default function MemoryGame() {
   const startGame = () => {
     setGameStarted(true);
     setStats((prev) => ({ ...prev, isPlaying: true }));
+  };
+
+  // Play click sound
+  const playClickSound = () => {
+    try {
+      // Create audio context
+      const audioContext = new (window.AudioContext ||
+        (window as any).webkitAudioContext)();
+
+      // Create oscillator for bell/chime sound
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+
+      // Connect nodes
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      // Configure sound (bell-like chime)
+      oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(
+        600,
+        audioContext.currentTime + 0.1
+      );
+      oscillator.frequency.exponentialRampToValueAtTime(
+        400,
+        audioContext.currentTime + 0.2
+      );
+
+      // Configure volume envelope (bell decay)
+      gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+      gainNode.gain.linearRampToValueAtTime(
+        0.3,
+        audioContext.currentTime + 0.01
+      );
+      gainNode.gain.exponentialRampToValueAtTime(
+        0.001,
+        audioContext.currentTime + 0.4
+      );
+
+      // Play sound
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.4);
+    } catch (error) {
+      // Silently fail if audio is not supported
+      console.log("Audio not supported");
+    }
+  };
+
+  // Play match sound
+  const playMatchSound = () => {
+    try {
+      const audioContext = new (window.AudioContext ||
+        (window as any).webkitAudioContext)();
+
+      // Create multiple oscillators for rich chime sound
+      const osc1 = audioContext.createOscillator();
+      const osc2 = audioContext.createOscillator();
+      const osc3 = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+
+      // Connect nodes
+      osc1.connect(gainNode);
+      osc2.connect(gainNode);
+      osc3.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      // Configure frequencies (beautiful chime progression)
+      osc1.frequency.setValueAtTime(523, audioContext.currentTime); // C5
+      osc2.frequency.setValueAtTime(659, audioContext.currentTime); // E5
+      osc3.frequency.setValueAtTime(784, audioContext.currentTime); // G5
+
+      // Add slight detuning for richness
+      osc1.frequency.exponentialRampToValueAtTime(
+        520,
+        audioContext.currentTime + 0.8
+      );
+      osc2.frequency.exponentialRampToValueAtTime(
+        655,
+        audioContext.currentTime + 0.8
+      );
+      osc3.frequency.exponentialRampToValueAtTime(
+        780,
+        audioContext.currentTime + 0.8
+      );
+
+      // Configure volume (long, beautiful decay)
+      gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+      gainNode.gain.linearRampToValueAtTime(
+        0.25,
+        audioContext.currentTime + 0.05
+      );
+      gainNode.gain.exponentialRampToValueAtTime(
+        0.001,
+        audioContext.currentTime + 1.2
+      );
+
+      // Play sound
+      osc1.start(audioContext.currentTime);
+      osc2.start(audioContext.currentTime);
+      osc3.start(audioContext.currentTime);
+      osc1.stop(audioContext.currentTime + 1.2);
+      osc2.stop(audioContext.currentTime + 1.2);
+      osc3.stop(audioContext.currentTime + 1.2);
+    } catch (error) {
+      console.log("Audio not supported");
+    }
+  };
+
+  // Play victory sound
+  const playVictorySound = () => {
+    try {
+      const audioContext = new (window.AudioContext ||
+        (window as any).webkitAudioContext)();
+
+      // Create triumphant fanfare melody
+      const notes = [523, 659, 784, 1047, 1319]; // C5, E5, G5, C6, E6
+      const timing = [0, 0.15, 0.3, 0.5, 0.7];
+
+      notes.forEach((freq, index) => {
+        // Create multiple oscillators for each note for richness
+        const osc1 = audioContext.createOscillator();
+        const osc2 = audioContext.createOscillator();
+        const osc3 = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        osc3.connect(gain);
+        gain.connect(audioContext.destination);
+
+        osc1.frequency.setValueAtTime(freq, audioContext.currentTime);
+        osc2.frequency.setValueAtTime(freq * 1.5, audioContext.currentTime); // Fifth above
+        osc3.frequency.setValueAtTime(freq * 0.5, audioContext.currentTime); // Octave below
+
+        // Create crescendo effect
+        const volume = 0.08 + index * 0.02; // Increasing volume
+        gain.gain.setValueAtTime(0, audioContext.currentTime + timing[index]);
+        gain.gain.linearRampToValueAtTime(
+          volume,
+          audioContext.currentTime + timing[index] + 0.08
+        );
+        gain.gain.exponentialRampToValueAtTime(
+          0.001,
+          audioContext.currentTime + timing[index] + 0.6
+        );
+
+        osc1.start(audioContext.currentTime + timing[index]);
+        osc2.start(audioContext.currentTime + timing[index]);
+        osc3.start(audioContext.currentTime + timing[index]);
+        osc1.stop(audioContext.currentTime + timing[index] + 0.6);
+        osc2.stop(audioContext.currentTime + timing[index] + 0.6);
+        osc3.stop(audioContext.currentTime + timing[index] + 0.6);
+      });
+    } catch (error) {
+      console.log("Audio not supported");
+    }
   };
 
   // Create particles effect
@@ -294,6 +451,16 @@ export default function MemoryGame() {
   // Initialize game on mount
   useEffect(() => {
     initializeGame();
+
+    // Check if user is on mobile device
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      ) || window.innerWidth < 768;
+
+    if (isMobile) {
+      setShowMobileWarning(true);
+    }
   }, []);
 
   // Handle card flip
@@ -320,6 +487,9 @@ export default function MemoryGame() {
       return;
     }
 
+    // Play click sound
+    playClickSound();
+
     const newFlippedCards = [...flippedCards, cardId];
     setFlippedCards(newFlippedCards);
 
@@ -343,6 +513,8 @@ export default function MemoryGame() {
 
         if (firstCard && secondCard && firstCard.image === secondCard.image) {
           // Match found - keep cards flipped and mark as matched
+          playMatchSound(); // Play match sound immediately
+
           setTimeout(() => {
             setCards((prev) =>
               prev.map((card) =>
@@ -381,6 +553,8 @@ export default function MemoryGame() {
 
             if (updatedCards.every((card) => card.isMatched)) {
               // Game complete
+              playVictorySound(); // Play victory sound
+
               setStats((prev) => ({
                 ...prev,
                 isComplete: true,
@@ -688,6 +862,34 @@ export default function MemoryGame() {
                   >
                     <RotateCcw className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
                     Play Again
+                  </Button>
+                </div>
+              </Card>
+            </div>
+          )}
+
+          {/* Mobile Warning Modal */}
+          {showMobileWarning && (
+            <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
+              <Card className="bg-white p-6 text-center max-w-sm w-full shadow-2xl mx-4">
+                <div className="mb-6">
+                  <div className="text-6xl mb-4">📱</div>
+                  <h2 className="text-xl font-bold text-gray-800 mb-3">
+                    Mobile Device Detected
+                  </h2>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    For the best gaming experience, we recommend playing EthOS
+                    Faces on a desktop or laptop computer. The game is optimized
+                    for larger screens and mouse/trackpad interaction.
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <Button
+                    onClick={() => setShowMobileWarning(false)}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-sm font-medium"
+                  >
+                    Continue Anyway
                   </Button>
                 </div>
               </Card>

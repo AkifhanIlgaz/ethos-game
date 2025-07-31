@@ -168,8 +168,7 @@ const WORDS_AND_DEFINITIONS = [
   },
   {
     word: "DAPP",
-    definition:
-      "A decentralized application running on a blockchain network.",
+    definition: "A decentralized application running on a blockchain network.",
   },
   {
     word: "WALLET",
@@ -178,13 +177,11 @@ const WORDS_AND_DEFINITIONS = [
   },
   {
     word: "ERC20",
-    definition:
-      "The standard for fungible tokens on the Ethereum blockchain.",
+    definition: "The standard for fungible tokens on the Ethereum blockchain.",
   },
   {
     word: "NFT",
-    definition:
-      "A non-fungible token representing unique digital ownership.",
+    definition: "A non-fungible token representing unique digital ownership.",
   },
   {
     word: "NODE",
@@ -210,17 +207,16 @@ const WORDS_AND_DEFINITIONS = [
     word: "GAS",
     definition:
       "A fee paid to perform a transaction or execute a smart contract on Ethereum.",
-  }
-]
-
-
-
+  },
+];
 
 const MAX_WRONG_GUESSES = 6;
 
 export default function HangmanGame() {
   const [currentWordData, setCurrentWordData] = useState(
-    WORDS_AND_DEFINITIONS[Math.floor(Math.random() * WORDS_AND_DEFINITIONS.length)]
+    WORDS_AND_DEFINITIONS[
+      Math.floor(Math.random() * WORDS_AND_DEFINITIONS.length)
+    ]
   );
   const [guessedLetters, setGuessedLetters] = useState<Set<string>>(new Set());
   const [wrongGuesses, setWrongGuesses] = useState(0);
@@ -300,15 +296,13 @@ export default function HangmanGame() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-4 mb-4">
-       
-             <h1 className="text-2xl sm:text-4xl font-bold text-white mb-2 sm:mb-4">
+            <h1 className="text-2xl sm:text-4xl font-bold text-white mb-2 sm:mb-4">
               Hangman
             </h1>
-          </div> <p className="text-gray-300 text-sm sm:text-lg">
-                       Guess the blockchain and Ethereum-related terms!
-
-            </p>
-        
+          </div>{" "}
+          <p className="text-gray-300 text-sm sm:text-lg">
+            Guess the blockchain and Ethereum-related terms!
+          </p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
@@ -363,7 +357,7 @@ export default function HangmanGame() {
           </Card>
 
           <div>
-            <Card className="h-fit " >
+            <Card className="h-fit ">
               <CardHeader>
                 <CardTitle className="text-center">Letter Guesses</CardTitle>
               </CardHeader>
@@ -393,15 +387,18 @@ export default function HangmanGame() {
               </CardContent>
             </Card>
             <div className="text-center mt-8">
-              <Button onClick={startNewGame}   className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-white/30 border px-3 sm:px-4 py-2 text-xs sm:text-base">
+              <Button
+                onClick={startNewGame}
+                className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-white/30 border px-3 sm:px-4 py-2 text-xs sm:text-base"
+              >
                 New Game
               </Button>
             </div>
-            
+
             <div className="space-y-3 mt-4">
               {gameStatus !== "playing" && (
                 <div className="text-center">
-                  <p className="text-white font-semibold mb-3">
+                  <p className="text-white font-bold mb-3">
                     {gameStatus === "won"
                       ? "🎉 Congratulations! You found the word!"
                       : "😔 You lost! The word was: " + currentWordData.word}

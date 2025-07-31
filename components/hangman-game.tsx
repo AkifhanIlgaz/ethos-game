@@ -9,42 +9,172 @@ const WORDS_AND_DEFINITIONS = [
   {
     word: "ROLLUP",
     definition:
-      "A scaling solution that processes transactions off-chain and posts data on-chain.",
+      "Layer 2 scaling solution that bundles multiple transactions off-chain and posts them on Ethereum.",
+  },
+  {
+    word: "SEQUENCER",
+    definition:
+      "A component in rollups that orders and submits transactions to the L1.",
+  },
+  {
+    word: "SETTLEMENT",
+    definition:
+      "The process of finalizing and anchoring Layer 2 transactions onto Ethereum mainnet.",
+  },
+  {
+    word: "SHAREDSEQUENCER",
+    definition:
+      "A decentralized sequencer design used by multiple rollups to coordinate ordering.",
+  },
+  {
+    word: "INTENT",
+    definition:
+      "A user’s desired outcome or action, which can be fulfilled by different actors on-chain.",
+  },
+  {
+    word: "MEV",
+    definition:
+      "(Maximal Extractable Value) — profit miners or validators can gain by reordering transactions.",
+  },
+  {
+    word: "APPCHAIN",
+    definition:
+      "A blockchain customized for a single application, often built on modular frameworks.",
+  },
+  {
+    word: "INTEROPERABILITY",
+    definition:
+      "The ability of different blockchains and systems to work and communicate with each other.",
+  },
+  {
+    word: "ZKPROOF",
+    definition:
+      "(Zero-Knowledge Proof) — cryptographic proof that allows one party to prove something is true without revealing the data itself.",
+  },
+  {
+    word: "MODULARITY",
+    definition:
+      "Design principle where components (e.g., execution, settlement, data availability) can be swapped or independently upgraded.",
+  },
+  {
+    word: "EIGENLAYER",
+    definition:
+      "A restaking protocol for Ethereum, enabling shared security across services.",
+  },
+  {
+    word: "MODULAR",
+    definition:
+      "EthereumOS embraces this approach: separate layers for execution, data availability, and consensus.",
+  },
+  {
+    word: "BLOBSTREAM",
+    definition:
+      "Data availability layer used by EthereumOS to publish L2 data on L1.",
+  },
+  {
+    word: "SHAREDSECURITY",
+    definition:
+      "Multiple services use the same trust base via Ethereum staking or restaking.",
   },
   {
     word: "STAKING",
     definition:
-      "Locking up tokens to support network operations like block validation in proof-of-stake.",
+      "The act of locking up cryptocurrency to support the operations of a blockchain network in return for rewards.",
   },
   {
-    word: "GAS",
+    word: "VALIDATOR",
     definition:
-      "A fee paid to perform a transaction or execute a smart contract on Ethereum.",
+      "An entity in a Proof-of-Stake system responsible for proposing and validating new blocks on the blockchain.",
+  },
+  {
+    word: "SOLIDITY",
+    definition:
+      "A statically-typed programming language designed for developing smart contracts on Ethereum.",
   },
   {
     word: "SMARTCONTRACT",
     definition:
-      "A self-executing contract with terms directly written into code.",
+      "Self-executing code that runs on the blockchain and automatically enforces rules and agreements.",
   },
   {
-    word: "WALLET",
+    word: "BLOCKCHAIN",
     definition:
-      "A digital tool to store and manage your cryptocurrencies and private keys.",
+      "A distributed, decentralized ledger composed of blocks that store transactional data securely and immutably.",
   },
   {
     word: "METAMASK",
     definition:
-      "A popular Ethereum wallet browser extension for interacting with dApps.",
+      "A browser extension and mobile wallet used for managing Ethereum accounts and interacting with dApps.",
+  },
+  {
+    word: "HARDHAT",
+    definition:
+      "A development environment and task runner used to compile, test, and deploy smart contracts on Ethereum.",
+  },
+  {
+    word: "ETHEREUM",
+    definition:
+      "A decentralized, open-source blockchain platform that enables the creation of smart contracts and decentralized applications.",
+  },
+  {
+    word: "INFURA",
+    definition:
+      "A service that provides scalable access to Ethereum and IPFS networks without running a full node.",
   },
   {
     word: "LAYER2",
     definition:
-      "Solutions built on top of Ethereum to increase scalability and reduce costs.",
+      "Secondary frameworks or protocols built on top of Layer 1 blockchains to improve scalability and transaction throughput.",
+  },
+  {
+    word: "ZEROKNOWLEDGE",
+    definition:
+      "A cryptographic method that allows one party to prove to another that a statement is true without revealing any information.",
+  },
+  {
+    word: "OPTIMISM",
+    definition:
+      "An Ethereum Layer 2 scaling solution that uses optimistic rollups to reduce gas fees and increase throughput.",
+  },
+  {
+    word: "ARBITRUM",
+    definition:
+      "A Layer 2 optimistic rollup solution for Ethereum focused on faster and cheaper smart contract execution.",
+  },
+  {
+    word: "MULTISIG",
+    definition:
+      "A digital signature scheme that requires multiple private keys to authorize a blockchain transaction.",
+  },
+  {
+    word: "DECENTRALIZATION",
+    definition:
+      "The distribution of authority and control across a blockchain network, reducing reliance on single points of failure.",
+  },
+  {
+    word: "IMMUTABILITY",
+    definition:
+      "The characteristic of blockchain data that ensures once information is written, it cannot be altered or deleted.",
+  },
+  {
+    word: "DEFI",
+    definition:
+      "An ecosystem of permissionless financial applications built on blockchain networks, primarily Ethereum.",
+  },
+  {
+    word: "GOVERNANCE",
+    definition:
+      "The mechanisms and rules through which blockchain protocols and dApps evolve and make collective decisions.",
   },
   {
     word: "DAPP",
     definition:
       "A decentralized application running on a blockchain network.",
+  },
+  {
+    word: "WALLET",
+    definition:
+      "A digital tool to store and manage your cryptocurrencies and private keys.",
   },
   {
     word: "ERC20",
@@ -57,29 +187,9 @@ const WORDS_AND_DEFINITIONS = [
       "A non-fungible token representing unique digital ownership.",
   },
   {
-    word: "VALIDATOR",
+    word: "NODE",
     definition:
-      "A participant in proof-of-stake networks responsible for validating transactions and blocks.",
-  },
-  {
-    word: "SOLIDITY",
-    definition:
-      "The main programming language used to write Ethereum smart contracts.",
-  },
-  {
-    word: "ETHEREUM",
-    definition:
-      "A decentralized platform enabling smart contracts and dApps to run without downtime or fraud.",
-  },
-  {
-    word: "HARDHAT",
-    definition:
-      "A development environment for compiling, testing, and deploying Ethereum smart contracts.",
-  },
-  {
-    word: "WEB3",
-    definition:
-      "A new iteration of the internet focused on decentralization, blockchain, and user ownership.",
+      "A computer that participates in the blockchain network by maintaining a copy of the ledger.",
   },
   {
     word: "HASH",
@@ -87,26 +197,22 @@ const WORDS_AND_DEFINITIONS = [
       "A fixed-length string generated from data, used in blockchain for security and integrity.",
   },
   {
-    word: "MINER",
-    definition:
-      "A participant that uses computational power to validate transactions and secure proof-of-work blockchains.",
-  },
-  {
     word: "FORK",
     definition:
       "A change to a blockchain protocol that may create a separate version of the chain.",
   },
   {
-    word: "NODE",
+    word: "WEB3",
     definition:
-      "A computer that participates in the blockchain network by maintaining a copy of the ledger.",
+      "A new iteration of the internet focused on decentralization, blockchain, and user ownership.",
   },
   {
-    word: "DEFI",
+    word: "GAS",
     definition:
-      "Decentralized finance — financial services built on blockchain without intermediaries.",
+      "A fee paid to perform a transaction or execute a smart contract on Ethereum.",
   }
-];
+]
+
 
 
 

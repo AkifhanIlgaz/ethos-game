@@ -32,7 +32,7 @@ export default function Page() {
             Eth OS Games
           </h1>
           <p className="text-gray-300 text-lg">
-            Play fun games and improve your skills!
+            Play fun games and get code!
           </p>
         </div>
 

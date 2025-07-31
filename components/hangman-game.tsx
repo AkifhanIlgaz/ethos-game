@@ -12,57 +12,109 @@ const WORDS_AND_DEFINITIONS = [
       "A scaling solution that processes transactions off-chain and posts data on-chain.",
   },
   {
-    word: "ZKPROOF",
+    word: "STAKING",
     definition:
-      "Cryptographic method that proves a statement is true without revealing the statement itself.",
+      "Locking up tokens to support network operations like block validation in proof-of-stake.",
   },
   {
-    word: "EIGENLAYER",
+    word: "GAS",
     definition:
-      "A restaking protocol for Ethereum, enabling shared security across services.",
+      "A fee paid to perform a transaction or execute a smart contract on Ethereum.",
   },
   {
-    word: "SEQUENCER",
+    word: "SMARTCONTRACT",
     definition:
-      "The component that orders transactions in a Layer 2 rollup chain.",
+      "A self-executing contract with terms directly written into code.",
   },
   {
-    word: "MODULAR",
+    word: "WALLET",
     definition:
-      "EthereumOS embraces this approach: separate layers for execution, data availability, and consensus.",
+      "A digital tool to store and manage your cryptocurrencies and private keys.",
   },
   {
-    word: "BLOBSTREAM",
+    word: "METAMASK",
     definition:
-      "Data availability layer used by EthereumOS to publish L2 data on L1.",
+      "A popular Ethereum wallet browser extension for interacting with dApps.",
   },
   {
-    word: "SETTLEMENT",
+    word: "LAYER2",
     definition:
-      "Final stage of a transaction's life—where it becomes irreversible and trustless.",
+      "Solutions built on top of Ethereum to increase scalability and reduce costs.",
   },
   {
-    word: "SHAREDSECURITY",
+    word: "DAPP",
     definition:
-      "Multiple services use the same trust base via Ethereum staking or restaking.",
+      "A decentralized application running on a blockchain network.",
   },
   {
-    word: "INTENT",
+    word: "ERC20",
     definition:
-      "Instead of sending raw transactions, users express what they want to do—then the system finds the best path.",
+      "The standard for fungible tokens on the Ethereum blockchain.",
   },
   {
-    word: "MEV",
+    word: "NFT",
     definition:
-      "The extra value a block producer can capture when ordering or including transactions.",
+      "A non-fungible token representing unique digital ownership.",
   },
+  {
+    word: "VALIDATOR",
+    definition:
+      "A participant in proof-of-stake networks responsible for validating transactions and blocks.",
+  },
+  {
+    word: "SOLIDITY",
+    definition:
+      "The main programming language used to write Ethereum smart contracts.",
+  },
+  {
+    word: "ETHEREUM",
+    definition:
+      "A decentralized platform enabling smart contracts and dApps to run without downtime or fraud.",
+  },
+  {
+    word: "HARDHAT",
+    definition:
+      "A development environment for compiling, testing, and deploying Ethereum smart contracts.",
+  },
+  {
+    word: "WEB3",
+    definition:
+      "A new iteration of the internet focused on decentralization, blockchain, and user ownership.",
+  },
+  {
+    word: "HASH",
+    definition:
+      "A fixed-length string generated from data, used in blockchain for security and integrity.",
+  },
+  {
+    word: "MINER",
+    definition:
+      "A participant that uses computational power to validate transactions and secure proof-of-work blockchains.",
+  },
+  {
+    word: "FORK",
+    definition:
+      "A change to a blockchain protocol that may create a separate version of the chain.",
+  },
+  {
+    word: "NODE",
+    definition:
+      "A computer that participates in the blockchain network by maintaining a copy of the ledger.",
+  },
+  {
+    word: "DEFI",
+    definition:
+      "Decentralized finance — financial services built on blockchain without intermediaries.",
+  }
 ];
+
+
 
 const MAX_WRONG_GUESSES = 6;
 
 export default function HangmanGame() {
   const [currentWordData, setCurrentWordData] = useState(
-    WORDS_AND_DEFINITIONS[0]
+    WORDS_AND_DEFINITIONS[Math.floor(Math.random() * WORDS_AND_DEFINITIONS.length)]
   );
   const [guessedLetters, setGuessedLetters] = useState<Set<string>>(new Set());
   const [wrongGuesses, setWrongGuesses] = useState(0);

@@ -10,14 +10,16 @@ export default function Page() {
       title: "Hangman",
       description: "Guess the word, save the man!",
       href: "/hangman",
-      img: "/images/logo1.jpg"
+      img: "/images/logo1.jpg",
+      buttonClass: "bg-gradient-to-r from-orange-500 to-red-500 hover:opacity-90"
     },
     {
       id: "faces",
       title: "EthOS Faces",
       description: "Match the facial expressions and learn emotions!",
       href: "/faces",
-      img: "images/logo2.jpg"
+      img: "/images/logo2.jpg",
+      buttonClass: "bg-gradient-to-r from-green-500 to-emerald-500 hover:opacity-90"
     }
   ]
 
@@ -39,8 +41,8 @@ export default function Page() {
           {games.map((game) => (
             <Card key={game.id} className="group hover:scale-105 transition-all duration-300 border-white/20 bg-white/5 backdrop-blur-sm">
               <CardHeader className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/80 flex items-center justify-center shadow-lg">
-                  <Image src={game.img} alt="Game Logo" width={48} height={48} className="rounded-full object-cover" />
+                <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                  <Image src={game.img} alt="Game Logo" width={64} height={64} className="rounded-full object-cover shadow-lg" />
                 </div>
                 <CardTitle className="text-white text-xl font-bold">
                   {game.title}
@@ -52,7 +54,7 @@ export default function Page() {
               <CardContent className="text-center">
                 <Link href={game.href}>
                   <Button 
-                    className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90 transition-all duration-300"
+                    className={`w-full ${game.buttonClass} transition-all duration-300`}
                   >
                     Play
                   </Button>

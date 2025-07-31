@@ -243,7 +243,7 @@ export default function HangmanGame() {
             <div className="space-y-3 mt-4">
               {gameStatus !== "playing" && (
                 <div className="text-center">
-                  <p className="text-black font-semibold mb-3">
+                  <p className="text-white font-semibold mb-3">
                     {gameStatus === "won"
                       ? "🎉 Congratulations! You found the word!"
                       : "😔 You lost! The word was: " + currentWordData.word}

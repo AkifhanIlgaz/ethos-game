@@ -8,19 +8,16 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "ethOS Games",
   description: "Educational and entertaining games",
-  generator: "yucci",
+  generator: "Zozak",
 };
 
 function Header() {
   return (
     <header className="w-full ">
       <div className="container mx-auto px-4 py-4 items-center">
-       
-       
-           <Link href="/" className="flex items-center space-x-2">
+        <Link href="/" className="flex items-center space-x-2">
           <span className="text-white font-bold text-xl">EthOS Games</span>
         </Link>
-
       </div>
     </header>
   );

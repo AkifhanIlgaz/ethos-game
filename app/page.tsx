@@ -44,6 +44,41 @@ export default function Page() {
       author: "KendineCrypto",
       twitter: "https://x.com/KendineCrypto_",
     },
+    {
+      id: "shoot",
+      title: "Shoot & Jump",
+      description: "Shoot or jump and earn points!",
+      href: "https://spongebobnfts.github.io/Eth-OS-Game/",
+      img: "/images/logo-yellow-green.jpg",
+      buttonClass:
+        "bg-gradient-to-r from-blue-500 to-purple-500 hover:opacity-90",
+      author: "0xsagarr",
+      twitter: "https://x.com/0xsagarr",
+    },
+
+    {
+      id: "jump",
+      title: "EthOS Jump",
+      description: "Jump, jump, jump !",
+      href: "https://ethosjump.vercel.app/",
+      img: "/images/logo-blue.jpg",
+      buttonClass:
+        "bg-gradient-to-r from-blue-500 to-purple-500 hover:opacity-90",
+      author: "ouzmd",
+      twitter: "https://x.com/ouzmd",
+    },
+    {
+      id: "adventure",
+      title: "EthOS Adventure",
+      description:
+        "Collect the ETH-OS logo in a random area of the map and take it to the store, earning points.",
+      href: "https://atkutu.itch.io/eth-os-score-game",
+      img: "/images/logo-blue-angry.jpg",
+      buttonClass:
+        "bg-gradient-to-r from-blue-500 to-purple-500 hover:opacity-90",
+      author: "Ilker Duman",
+      twitter: "https://x.com/ilkerduman90",
+    },
   ];
 
   return (
@@ -56,7 +91,7 @@ export default function Page() {
         </div>
 
         {/* Games Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {games.map((game) => (
             <Card
               key={game.id}

@@ -40,7 +40,7 @@ export default function Page() {
       href: "https://air-updown-game.vercel.app/",
       img: "/images/logo3.jpg",
       buttonClass:
-        "bg-gradient-to-r from-blue-500 to-purple-500 hover:opacity-90",
+        "bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-90",
       author: "KendineCrypto",
       twitter: "https://x.com/KendineCrypto_",
     },
@@ -51,11 +51,10 @@ export default function Page() {
       href: "https://spongebobnfts.github.io/Eth-OS-Game/",
       img: "/images/logo-yellow-green.jpg",
       buttonClass:
-        "bg-gradient-to-r from-blue-500 to-purple-500 hover:opacity-90",
+        "bg-gradient-to-r from-yellow-500 to-orange-500 hover:opacity-90",
       author: "0xsagarr",
       twitter: "https://x.com/0xsagarr",
     },
-
     {
       id: "jump",
       title: "EthOS Jump",
@@ -63,7 +62,7 @@ export default function Page() {
       href: "https://ethosjump.vercel.app/",
       img: "/images/logo-blue.jpg",
       buttonClass:
-        "bg-gradient-to-r from-blue-500 to-purple-500 hover:opacity-90",
+        "bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90",
       author: "ouzmd",
       twitter: "https://x.com/ouzmd",
     },
@@ -71,11 +70,11 @@ export default function Page() {
       id: "adventure",
       title: "EthOS Adventure",
       description:
-        "Collect the ETH-OS logo in a random area of the map and take it to the store, earning points.",
+        "Collect the ETH-OS logo, take it to the store, earning points.",
       href: "https://atkutu.itch.io/eth-os-score-game",
       img: "/images/logo-blue-angry.jpg",
       buttonClass:
-        "bg-gradient-to-r from-blue-500 to-purple-500 hover:opacity-90",
+        "bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90",
       author: "Ilker Duman",
       twitter: "https://x.com/ilkerduman90",
     },
@@ -95,7 +94,7 @@ export default function Page() {
           {games.map((game) => (
             <Card
               key={game.id}
-              className="group hover:scale-105 transition-all duration-300 border-white/20 bg-white/5 backdrop-blur-sm"
+              className="group hover:scale-105 transition-all duration-300 border-white/20 bg-white/5 backdrop-blur-sm flex flex-col"
             >
               <CardHeader className="text-center">
                 <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
@@ -114,7 +113,7 @@ export default function Page() {
                   {game.description}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="text-center">
+              <CardContent className="text-center flex flex-col justify-end flex-grow">
                 <div className="mb-3">
                   <p className="text-gray-400 text-sm">
                     by{" "}
